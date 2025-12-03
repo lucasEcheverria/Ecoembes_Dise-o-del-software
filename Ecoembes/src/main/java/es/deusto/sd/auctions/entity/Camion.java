@@ -11,10 +11,6 @@ public class Camion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "planta_id")
-    private PlantaDeReciclaje planta;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "camion_contenedor",
@@ -35,13 +31,10 @@ public class Camion {
         this.contenedores = contenedores;
     }
 
-    public void setPlanta(PlantaDeReciclaje planta){this.planta = planta;}
-
     public Camion(){}
 
-    public Camion(List<Contenedor> contenedores, PlantaDeReciclaje planta, Date fecha) {
+    public Camion(List<Contenedor> contenedores, Date fecha) {
         this.contenedores = contenedores;
-        this.planta = planta;
         this.fecha = fecha;
     }
 }
