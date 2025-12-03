@@ -1,8 +1,0 @@
-${AnsiColor.BRIGHT_RED}:: Software Design 2024-25 ::${AnsiColor.DEFAULT}
-
-${AnsiColor.BRIGHT_RED} ____  ___  _____  ____  __  __  ____  ____  ___      __    ____  ____ ${AnsiColor.DEFAULT}
-${AnsiColor.YELLOW}( ___)/ __)(  _  )( ___)(  \/  )(  _ \( ___)/ __)    /__\  (  _ \(_  _)${AnsiColor.DEFAULT}
-${AnsiColor.BRIGHT_GREEN} )__)( (__  )(_)(  )__)  )    (  ) _ < )__) \__ \   /(__)\  )___/ _)(_ ${AnsiColor.DEFAULT}
-${AnsiColor.BRIGHT_CYAN}(____)\___)(_____)(____)(_/\/\_)(____/(____)(___/  (__)(__)(__)  (____)${AnsiColor.DEFAULT}
-
-${AnsiColor.BRIGHT_MAGENTA}:: EcoEmbes API v1 :: Spring Boot ${spring-boot.version} ::${AnsiColor.DEFAULT}
