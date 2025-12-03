@@ -1,19 +1,19 @@
 package es.deusto.sd.auctions.dto;
 
 public class PlantaDeReciclajeDTO {
-    private int numero;
+    private int tipo;
 
-
-    public PlantaDeReciclajeDTO(int tipo){
-        this.numero = tipo;
+    public PlantaDeReciclajeDTO(int tipo) {
+        this.tipo = tipo;
     }
 
-    public int getNumero() {
-        return numero;
+    public long getTipo() {
+        return tipo;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setTipo(int id) {
+        this.tipo = tipo;
     }
+
 }
 
