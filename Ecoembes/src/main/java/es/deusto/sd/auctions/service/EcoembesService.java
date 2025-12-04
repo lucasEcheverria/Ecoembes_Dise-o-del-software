@@ -14,6 +14,7 @@ import es.deusto.sd.auctions.factory.PlantsFactory;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -37,14 +38,35 @@ public class EcoembesService {
         factory = PlantsFactory.getInstance();
 
         // PLANTA 1: PlasSB (REST) - Puerto 8083
-        plantas[0] = factory.crear("SpringBoot", "http://localhost:8083", "token-plassb-123");
-        System.out.println("✓ Planta 1 (PlasSB - REST) configurada en http://localhost:8083");
+        plantas[0] = factory.crear("SpringBoot", "http://localhost:8085", "token-plassb-123");
+        System.out.println("✓ Planta 1 (PlasSB - REST) configurada en http://localhost:8085");
 
         // PLANTA 2: ContSocket (TCP) - Puerto 8090
         plantas[1] = factory.crear("Socket", "localhost:8090", "token-contsocket-456");
         System.out.println("✓ Planta 2 (ContSocket - Socket) configurada en localhost:8090");
 
         System.out.println("✓ EcoembesService inicializado con " + plantas.length + " plantas");
+
+
+        try {
+            // 1. Crear la fecha: 01/01/2025
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            Date fecha = sdf.parse("01-01-2025");
+
+            System.out.println("📅 Consultando capacidad para: " + sdf.format(fecha));
+
+            // 2. Consultar a través del Gateway (usa plantas[0] internamente)
+            double capacidad = capacidad_planta_fecha(0, new Date(125, 00, 01));
+
+            // 3. Mostrar resultado
+            System.out.println("✅ Capacidad obtenida: " + capacidad + " toneladas");
+            System.out.println("🎯 Gateway funcionando correctamente\n");
+
+        } catch (Exception e) {
+            System.err.println("❌ Error al consultar capacidad: " + e.getMessage());
+            System.err.println("💡 Verifica que PlasSB esté corriendo en localhost:8085");
+            e.printStackTrace();
+        }
     }
 
     //Get estado de los contenedores entre fechas

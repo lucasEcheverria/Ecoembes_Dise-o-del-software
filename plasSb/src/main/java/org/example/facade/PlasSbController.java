@@ -33,10 +33,10 @@ public class PlasSbController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @GetMapping("/capacidad/{fecha}")
+    @GetMapping("/capacidad")
     public ResponseEntity<Double> get_capacidad_fecha(
             @Parameter(name = "fecha", description = "Fecha de la que se requiere la capacidad.", required = true, example = "01-01-2025")
-            @PathVariable("fecha") String fecha
+            @RequestParam("fecha") String fecha
     ){
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");

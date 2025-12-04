@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 
 @Repository
-public interface CapacidadRepository extends JpaRepository<Capacidad, Long> {
+public interface CapacidadRepository extends JpaRepository<Capacidad, Date> {
     Capacidad findByFecha(Date fecha);
 }
