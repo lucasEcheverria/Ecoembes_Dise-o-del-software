@@ -28,6 +28,12 @@ public class CapacidadService {
         this.capacidadesPorFecha = new HashMap<>();
         this.dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
+        Date fecha = new Date(125,00,01);
+
+        String date  = dateFormat.format(fecha);
+
+        capacidadesPorFecha.put(date, 100.0);
+
         // Inicializamos con datos de prueba
         inicializarCapacidades();
     }

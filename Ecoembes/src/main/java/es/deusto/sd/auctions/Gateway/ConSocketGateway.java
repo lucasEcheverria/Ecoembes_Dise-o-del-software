@@ -21,16 +21,13 @@ public class ConSocketGateway implements PlantaGateway {
 
     private final String host;
     private final int puerto;
-    private final String token;
     private final SimpleDateFormat dateFormat;
+    private  final Tipo tipo;
+    private final String nombre;
 
-    /**
-     * Constructor que parsea la URL en formato "host:puerto"
-     *
-     * @param url   URL en formato "localhost:8090" o "192.168.1.10:8090"
-     * @param token Token de autenticación
-     */
-    public ConSocketGateway(String url, String token) {
+    public ConSocketGateway(String url, Tipo tipo, String nombre) {
+        this.tipo = tipo;
+        this.nombre = nombre;
         // Parsear "localhost:8090" en host y puerto
         String[] partes = url.split(":");
         if (partes.length != 2) {
@@ -45,7 +42,6 @@ public class ConSocketGateway implements PlantaGateway {
             throw new IllegalArgumentException("Puerto inválido: " + partes[1]);
         }
 
-        this.token = token;
         this.dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
         System.out.println("[SOCKET GATEWAY] Configurado para " + host + ":" + puerto);
@@ -150,4 +146,13 @@ public class ConSocketGateway implements PlantaGateway {
             // Parsear respuesta: OK|123.45 o ERROR|mensaje
             return parsearRespuestaCapacidad(respuesta);
         }
+
+    @Override
+    public Tipo getTipo() {
+        return this.tipo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
 }

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import es.deusto.sd.auctions.Gateway.Tipo;
 import es.deusto.sd.auctions.dto.CamionRequestDTO;
 import es.deusto.sd.auctions.dto.ContenedorDTO;
 import es.deusto.sd.auctions.dto.EstadoDTO;
@@ -159,10 +160,10 @@ public class EcoembesController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @GetMapping("/plantas/{id_planta}/{fecha}")
+    @GetMapping("/plantas/{planta}/{fecha}")
     public ResponseEntity<Double> get_capacidad_planta_fecha(
-            @Parameter(name = "id_planta", description = "id de la planta", required = true, example = "00001")
-            @PathVariable("id_planta") int planta,
+            @Parameter(name = "planta", description = "nombre de la planta", required = true, example = "PlasSb")
+            @PathVariable("planta") String planta,
             @Parameter(name = "fecha", description = "fecha de la que quiero la capacidad ", required = true, example = "01-01-2025")
             @PathVariable("fecha") String fecha,
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
