@@ -19,14 +19,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("\n" +
-                "╔══════════════════════════════════════════════════════════╗\n" +
-                "║                                                          ║\n" +
-                "║              SERVIDOR PLASSB LTD. v1.0                   ║\n" +
-                "║           Planta de Reciclaje - REST Server              ║\n" +
-                "║                                                          ║\n" +
-                "╚══════════════════════════════════════════════════════════╝\n");
-
         SpringApplication.run(Main.class, args);
     }
 }

@@ -9,6 +9,10 @@ import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Para crear esta clase ha sido utilizada IA generativa: Claude Sonnet4.5 en algunos puntos para implementarla más rápidamente.
+ */
+
 @Schema(description = "Datos para crear un camión con contenedores para una planta")
 public class CamionRequestDTO {
 

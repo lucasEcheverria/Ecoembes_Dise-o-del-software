@@ -10,9 +10,9 @@ import es.deusto.sd.auctions.dto.PlantaDeReciclajeDTO;
 import es.deusto.sd.auctions.entity.Camion;
 import es.deusto.sd.auctions.entity.Contenedor;
 import es.deusto.sd.auctions.entity.Estado;
-import es.deusto.sd.auctions.entity.PlantaDeReciclaje;
 import es.deusto.sd.auctions.factory.PlantsFactory;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -20,8 +20,11 @@ import java.util.*;
 
 @Service
 public class EcoembesService {
+    @Autowired
     private final CamionRepository camionRepository;
+    @Autowired
     private final ContenedorRepository contenedorRepository;
+    @Autowired
     private final EstadoRepository estadosRepository;
 
     private PlantsFactory factory;
@@ -29,8 +32,8 @@ public class EcoembesService {
     private HashMap<String, PlantaGateway> plantasMap;
 
 
-    public EcoembesService(CamionRepository camionRepository, ContenedorRepository contenedorRepository, PlantaDeReciclajeRepository plantasRepository,
-                           EstadoRepository estadosRepository, RegistroResiduosPlantaRepository registrosResiduosPlantaRepository) {
+    public EcoembesService(CamionRepository camionRepository, ContenedorRepository contenedorRepository,
+                           EstadoRepository estadosRepository) {
         this.camionRepository = camionRepository;
         this.contenedorRepository = contenedorRepository;
         this.estadosRepository = estadosRepository;
@@ -129,7 +132,15 @@ public class EcoembesService {
 
     //Post crear un camión
     @Transactional
-    public void crear_camion(CamionRequestDTO dto, long id_planta) {
+    public void crear_camion(CamionRequestDTO dto, String planta) {
+        if(!plantasMap.containsKey(planta) || planta == null){
+            throw new IllegalArgumentException("La planta" + planta + " no existe; o no estas añadiendo ninguna");
+        }
+
+        List<Contenedor> contenedores = contenedorRepository.findAllById(dto.getContenedores());
+
+        Camion camion = new Camion(contenedores, planta, dto.getFecha());
+        camionRepository.save(camion);
     }
 
     public List<ContenedorDTO> getContenedores(){

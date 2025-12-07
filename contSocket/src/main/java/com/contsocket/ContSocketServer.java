@@ -104,14 +104,6 @@ public class ContSocketServer {
      * Imprime el banner de bienvenida con información útil.
      */
     private void imprimirBanner() {
-        System.out.println("\n" +
-                "╔══════════════════════════════════════════════════════════╗\n" +
-                "║                                                          ║\n" +
-                "║           SERVIDOR CONTSOCKET LTD. v1.0                  ║\n" +
-                "║           Planta de Reciclaje - Socket Server            ║\n" +
-                "║                                                          ║\n" +
-                "╚══════════════════════════════════════════════════════════╝\n");
-
         System.out.println("[SERVIDOR] Escuchando en puerto: " + PUERTO);
         System.out.println("[SERVIDOR] Esperando conexiones...");
         System.out.println("\n[INFO] Puedes probar el servidor con:");

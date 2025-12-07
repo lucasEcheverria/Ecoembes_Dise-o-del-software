@@ -9,10 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Gateway para conectarse a plantas de reciclaje mediante Sockets TCP.
- * Implementa el patrón Service Gateway para encapsular la complejidad
- * de la comunicación por sockets.
- *
  * PROTOCOLO:
  * - CAPACIDAD|dd-MM-yyyy -> OK|capacidad o ERROR|mensaje
  * - NOTIFICAR|numContenedores|numEnvases -> OK|mensaje o ERROR|mensaje

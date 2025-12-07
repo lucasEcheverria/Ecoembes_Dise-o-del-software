@@ -197,10 +197,10 @@ public class EcoembesController {
                     @ApiResponse(responseCode = "409", description = "Conflict: La planta ya está llena"),
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             })
-    @PostMapping("/plantas/{id_planta}/camiones_nuevo")
+    @PostMapping("/plantas/{nombre_planta}/camiones_nuevo")
     public ResponseEntity<Object> post_contenedores_plantas(
-            @Parameter(description = "ID de la planta de reciclaje", required = true, example = "1")
-            @PathVariable("id_planta") Long idPlanta,
+            @Parameter(description = "Nombre de la planta de reciclaje", required = true, example = "PlasSb")
+            @PathVariable("nombre_planta") String planta,
 
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Datos del camión: fecha y lista de contenedores",
@@ -214,7 +214,7 @@ public class EcoembesController {
                 return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Este usuario no tiene permitido realizar este tipo de consultas.");
             }*/
 
-            ecoembesService.crear_camion(camionDTO, idPlanta);
+            ecoembesService.crear_camion(camionDTO, planta);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Camión creado exitosamente con " /*+ camionDTO.getContenedores().size()*/ + " contenedores");
 
