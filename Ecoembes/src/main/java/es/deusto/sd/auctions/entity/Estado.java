@@ -22,7 +22,6 @@ public class Estado {
     @Column(name = "cantidad", nullable = false)
     private double cantidad;
 
-    // ⭐ ESTO FALTA - La FK hacia Contenedor
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contenedor_id", nullable = false)
     private Contenedor contenedor;
