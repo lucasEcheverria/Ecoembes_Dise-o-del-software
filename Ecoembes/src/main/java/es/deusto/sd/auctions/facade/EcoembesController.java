@@ -55,14 +55,14 @@ public class EcoembesController {
                     @ApiResponse(responseCode = "500", description = "Internal server error")
             }
     )
-    @GetMapping("/contenedores/estado/{id_contenedor}/{fecha_inicio}/{fecha_fin}")
+    @GetMapping("/contenedores/estado/{id_contenedor}")
     public ResponseEntity<List<EstadoDTO>> get_estado_fechas(
             @Parameter(name = "id_contenedor", description = "id del contenedor referido", required = true, example = "00001")
             @PathVariable("id_contenedor") String contenedor,
             @Parameter(name = "fecha_inicio", description = "fecha de inicio de los estados", required = true, example = "01-01-2025")
-            @PathVariable("fecha_inicio") String fecha_inicio,
+            @RequestParam("fecha_inicio") String fecha_inicio,
             @Parameter(name = "fecha_fin", description = "fecha de fin de los estados", required = true, example = "04-01-2025")
-            @PathVariable("fecha_fin") String fecha_fin,
+            @RequestParam("fecha_fin") String fecha_fin,
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
             @RequestParam (name = "token") String token_usuario){
             try {
