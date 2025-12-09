@@ -1,4 +1,20 @@
-contSocket/.classpath
-contSocket/.gradle/8.14/checksums/checksums.lock
-contSocket/.gradle/8.14/checksums/checksums.lock
-contSocket/.gradle/8.14/fileHashes/fileHashes.lock
+# Gradle
+.gradle/
+build/
+**/build/
+*.jar
+*.war
+
+# IDE
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
