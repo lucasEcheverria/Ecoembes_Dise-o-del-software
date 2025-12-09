@@ -1,3 +1,8 @@
-${AnsiColor.BRIGHT_RED}:: Software Design 2024-25 ::${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_RED}:: Diseño del Software 2025-26 ::${AnsiColor.DEFAULT}
 
-${AnsiColor.BRIGHT_MAGENTA}:: PlasSb API v1 :: Spring Boot ${spring-boot.version} ::${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_RED}  ____  ___  _____  ____  __  __  ____  ____  ___    _  _  ___   ${AnsiColor.DEFAULT}
+${AnsiColor.YELLOW} ( ___)/ __)(  _  )( ___)(  \/  )(  _ \( ___)/ __)  ( \/ )(__ \ ${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_GREEN}  )__)( (__  )(_)(  )__)  )    (  ) _ < )__) \__ \   \  /  / _/ ${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_CYAN} (____)\___)(_____)(____)(_/\/\_)(____/(____)(___/    \/()(___)${AnsiColor.DEFAULT}
+
+${AnsiColor.BRIGHT_MAGENTA}:: EcoEmbes v2 - Grupo 02 :: Spring Boot ${spring-boot.version} ::${AnsiColor.DEFAULT}
