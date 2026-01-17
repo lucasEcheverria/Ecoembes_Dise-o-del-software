@@ -1,4 +1,50 @@
 package main.web;
 
+import jakarta.servlet.http.HttpServletRequest;
+import main.data.Planta;
+import main.proxies.IServiceProxy;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.List;
+
 public class WebClientController {
+    private IServiceProxy serviceProxy;
+    private String token;
+
+    @ModelAttribute
+    public void addAtributes(Model model, HttpServletRequest request) {
+        String currentUrl = ServletUriComponentsBuilder.fromRequestUri(request).toUriString();
+        model.addAttribute("currentUrl", currentUrl); // Makes current URL available in all templates
+        model.addAttribute("token", token); // Makes token available in all templates
+    }
+
+    @GetMapping("/")
+    public String home(@RequestParam(name = "tocken",required = false) String token,
+            Model model){
+        model.addAttribute("token", token);
+        return "index";
+    }
+
+    @GetMapping("/plantas")
+    public String plantas(@RequestParam(name = "token", required = false) String token,
+                          Model model){
+        if (token == null || token.isEmpty()) {
+            model.addAttribute("errorMessage", "Sesión no válida.");
+            return "error";
+        }
+
+        try {
+            List<Planta> plantas = serviceProxy.getPlantas(token);
+            model.addAttribute("plantas", plantas);
+            model.addAttribute("token", token);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Error: " + ex.getMessage());
+            model.addAttribute("token", token);
+        }
+        return "plantas";
+    }
 }

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Plantas de Reciclaje - Ecoembes</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+<!-- Header -->
+<header class="bg-success shadow-sm">
+    <div class="container py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="/" class="text-decoration-none text-white">
+                <i class="fas fa-recycle fa-2x me-2"></i>
+                <span class="fs-3 fw-bold">Ecoembes</span>
+            </a>
+            <a th:href="@{/(token=${token})}" class="btn btn-light btn-sm">
+                <i class="fas fa-home me-2"></i>Volver al Inicio
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Navbar con logout -->
+<nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fas fa-industry me-2 text-success"></i>
+                Gestión de Plantas de Reciclaje
+            </span>
+
+        <div class="ms-auto">
+            <a th:href="@{/logout(token=${token})}" class="btn btn-danger btn-sm">
+                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+            </a>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido Principal -->
+<div class="container mt-4">
+
+    <!-- Título -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5">
+                <i class="fas fa-industry text-success me-2"></i>
+                Plantas de Reciclaje Disponibles
+            </h1>
+            <p class="lead text-muted">
+                Consulta la capacidad disponible y notifica envíos a las plantas
+            </p>
+        </div>
+    </div>
+
+    <!-- Mensaje de error (si existe) -->
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Grid de Paneles de Plantas -->
+    <div class="row g-4">
+
+        <!--
+            th:each - Itera sobre cada planta de la lista ${plantas}
+            Para cada PlantaDeReciclajeDTO, crea un card
+        -->
+        <div th:each="planta : ${plantas}" class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm border-success">
+
+                <!-- Header del Card -->
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <!-- Icono según el tipo de planta -->
+                        <i th:if="${planta.tipo.name() == 'REST'}" class="fas fa-cloud me-2"></i>
+                        <i th:if="${planta.tipo.name() == 'SOCKET'}" class="fas fa-network-wired me-2"></i>
+
+                        <!-- Nombre de la planta -->
+                        <span th:text="${planta.nombre}">Nombre Planta</span>
+                    </h5>
+                </div>
+
+                <!-- Body del Card -->
+                <div class="card-body">
+                    <!-- Tipo de protocolo -->
+                    <div class="mb-3">
+                            <span class="badge bg-info">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Protocolo: <span th:text="${planta.tipo}">REST</span>
+                            </span>
+                    </div>
+
+                    <!-- Descripción -->
+                    <p class="card-text text-muted">
+                        <i class="fas fa-building me-2"></i>
+                        Planta de reciclaje operativa disponible para recibir envíos
+                    </p>
+
+                    <!-- Formulario para consultar capacidad -->
+                    <div class="border-top pt-3">
+                        <h6 class="fw-bold mb-3">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            Consultar Capacidad
+                        </h6>
+
+                        <form method="get" th:action="@{/plantas/capacidad}">
+                            <!-- Campo oculto para el token -->
+                            <input type="hidden" name="token" th:value="${token}">
+
+                            <!-- Campo oculto para el ID de la planta -->
+                            <input type="hidden" name="plantaId" th:value="${planta.nombre}">
+
+                            <!-- Input de fecha -->
+                            <div class="input-group input-group-sm mb-2">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-calendar"></i>
+                                    </span>
+                                <input type="text"
+                                       class="form-control"
+                                       name="fecha"
+                                       placeholder="dd-MM-yyyy"
+                                       pattern="\d{2}-\d{2}-\d{4}"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-search me-1"></i>Ver Capacidad
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer del Card -->
+                <div class="card-footer bg-light">
+                    <!-- Botón para notificar envío -->
+                    <a th:href="@{/plantas/notificar(plantaNombre=${planta.nombre}, token=${token})}"
+                       class="btn btn-success btn-sm w-100">
+                        <i class="fas fa-truck me-2"></i>Notificar Envío
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mensaje si no hay plantas -->
+    <div th:if="${plantas == null || plantas.isEmpty()}" class="alert alert-warning mt-4" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        No hay plantas de reciclaje disponibles en este momento.
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="bg-light border-top mt-5 py-3">
+    <div class="container text-center">
+        <p class="text-muted mb-0">
+            <i class="fas fa-graduation-cap text-primary"></i>
+            Creado para la asignatura de <strong>Diseño del Software</strong>.
+            <strong>Universidad de Deusto</strong> (2025).
+        </p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
