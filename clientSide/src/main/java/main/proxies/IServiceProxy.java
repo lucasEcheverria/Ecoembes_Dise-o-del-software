@@ -11,5 +11,8 @@ public interface IServiceProxy {
     Double consultarCapacidadFecha(String token, String plantaId, String fecha);
     List<Contenedor>  getContenedores(String token);
     List<Estado> getHistorialContenedor(Long id, String fechaInicio, String fechaFin, String token);
+<<<<<<< HEAD
     void crearNuevoCamion(List<Long> contenedores, String planta, String fecha, String token);
+=======
+>>>>>>> origin/main
 }

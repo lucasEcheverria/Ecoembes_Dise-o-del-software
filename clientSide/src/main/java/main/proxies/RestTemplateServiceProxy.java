@@ -81,6 +81,7 @@ public class RestTemplateServiceProxy implements IServiceProxy{
             throw new RuntimeException("Error al obtener historial");
         }
     }
+<<<<<<< HEAD
 
     @Override
     public void crearNuevoCamion(List<Long> contenedores, String planta, String fecha, String token) {
@@ -95,4 +96,6 @@ public class RestTemplateServiceProxy implements IServiceProxy{
             throw new RuntimeException("Error al crear camión: " + e.getMessage());
         }
     }
+=======
+>>>>>>> origin/main
 }
