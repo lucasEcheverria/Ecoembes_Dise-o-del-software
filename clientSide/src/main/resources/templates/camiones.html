@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Camión - Ecoembes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .error-validation {
+            border: 2px solid #dc3545 !important;
+            background-color: #f8d7da !important;
+        }
+        .contenedor-item {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .contenedor-item:hover {
+            background-color: #f8f9fa;
+        }
+        .contenedor-item.selected {
+            background-color: #d1e7dd;
+            border-color: #198754;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<!-- Header -->
+<header class="bg-success shadow-sm">
+    <div class="container py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="/" class="text-decoration-none text-white">
+                <i class="fas fa-recycle fa-2x me-2"></i>
+                <span class="fs-3 fw-bold">Ecoembes</span>
+            </a>
+            <a th:href="@{/(token=${token})}" class="btn btn-light btn-sm">
+                <i class="fas fa-home me-2"></i>Volver al Inicio
+            </a>
+        </div>
+    </div>
+</header>
+
+<!-- Navbar -->
+<nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fas fa-truck me-2 text-warning"></i>
+                Crear Nuevo Camión
+            </span>
+    </div>
+</nav>
+
+<!-- Contenido Principal -->
+<div class="container mt-5">
+
+    <!-- Mensajes -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <!-- Formulario Centrado -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">
+                        <i class="fas fa-truck me-2"></i>
+                        Formulario de Creación de Camión
+                    </h3>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" th:action="@{/camiones/crear}" id="formCamion">
+                        <input type="hidden" name="token" th:value="${token}">
+
+                        <!-- Selección de Fecha -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Fecha de Envío
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="fecha"
+                                   id="fecha"
+                                   placeholder="dd-MM-yyyy"
+                                   pattern="\d{2}-\d{2}-\d{4}"
+                                   required>
+                        </div>
+
+                        <!-- Selección de Planta -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-industry me-2"></i>
+                                Selecciona Planta de Destino
+                            </label>
+                            <div class="border rounded p-3">
+                                <div th:each="planta : ${plantas}" class="form-check mb-2">
+                                    <input class="form-check-input planta-radio"
+                                           type="radio"
+                                           name="planta"
+                                           th:id="'planta-' + ${planta.nombre}"
+                                           th:value="${planta.nombre}"
+                                           th:data-nombre="${planta.nombre}"
+                                           required
+                                           onchange="validarCapacidad()">
+                                    <label class="form-check-label" th:for="'planta-' + ${planta.nombre}">
+                                        <strong th:text="${planta.nombre}"></strong>
+                                        <span class="badge bg-info ms-2" th:text="${planta.tipo}"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Selección de Contenedores -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-dumpster me-2"></i>
+                                Selecciona Contenedores
+                            </label>
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                <div th:each="contenedor : ${contenedores}"
+                                     class="contenedor-item"
+                                     th:onclick="'toggleContenedor(' + ${contenedor.id} + ', ' + ${contenedor.cantidad} + ')'">
+                                    <input class="form-check-input contenedor-checkbox"
+                                           type="checkbox"
+                                           name="contenedores"
+                                           th:id="'cont-' + ${contenedor.id}"
+                                           th:value="${contenedor.id}"
+                                           th:data-cantidad="${contenedor.cantidad}">
+                                    <label class="form-check-label ms-2" th:for="'cont-' + ${contenedor.id}">
+                                        <strong>Contenedor #<span th:text="${contenedor.id}"></span></strong>
+                                        <span class="ms-3">
+                                                <i class="fas fa-weight-hanging me-1"></i>
+                                                <span th:text="${contenedor.cantidad}"></span> kg
+                                            </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Resumen y Validación -->
+                        <div class="alert alert-info" id="resumenCapacidad">
+                            <h6 class="fw-bold mb-2">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Resumen
+                            </h6>
+                            <div class="d-flex justify-content-between">
+                                <span>Total seleccionado:</span>
+                                <strong id="totalSeleccionado">0 kg</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Capacidad de planta:</span>
+                                <strong id="capacidadPlanta">- kg</strong>
+                            </div>
+                            <hr>
+                            <div id="mensajeValidacion" class="mt-2"></div>
+                        </div>
+
+                        <!-- Botón Submit -->
+                        <div class="d-grid">
+                            <button type="submit"
+                                    class="btn btn-warning btn-lg"
+                                    id="btnSubmit"
+                                    disabled>
+                                <i class="fas fa-truck-loading me-2"></i>
+                                Crear Camión
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="bg-light border-top mt-5 py-3">
+    <div class="container text-center">
+        <p class="text-muted mb-0">
+            <i class="fas fa-graduation-cap text-primary"></i>
+            Creado para la asignatura de <strong>Diseño del Software</strong>.
+            <strong>Universidad de Deusto</strong> (2025).
+        </p>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script>
+    let capacidadPlantaActual = null;
+
+    function toggleContenedor(id, cantidad) {
+        const checkbox = document.getElementById('cont-' + id);
+        const item = checkbox.parentElement;
+
+        checkbox.checked = !checkbox.checked;
+
+        if (checkbox.checked) {
+            item.classList.add('selected');
+        } else {
+            item.classList.remove('selected');
+        }
+
+        validarCapacidad();
+    }
+
+    async function validarCapacidad() {
+        const plantaSeleccionada = document.querySelector('input[name="planta"]:checked');
+        const fecha = document.getElementById('fecha').value;
+        const token = document.querySelector('input[name="token"]').value;
+
+        if (!plantaSeleccionada || !fecha) {
+            document.getElementById('btnSubmit').disabled = true;
+            return;
+        }
+
+        // Calcular total de contenedores seleccionados
+        let totalKg = 0;
+        const checkboxes = document.querySelectorAll('.contenedor-checkbox:checked');
+        checkboxes.forEach(cb => {
+            totalKg += parseFloat(cb.dataset.cantidad);
+        });
+
+        document.getElementById('totalSeleccionado').textContent = totalKg.toFixed(2) + ' kg';
+
+        // Consultar capacidad de la planta
+        try {
+            const response = await fetch(
+                `/plantas/capacidad/api?plantaId=${plantaSeleccionada.value}&fecha=${fecha}&token=${token}`
+            );
+
+            if (response.ok) {
+                const capacidad = await response.json();
+                capacidadPlantaActual = capacidad;
+                document.getElementById('capacidadPlanta').textContent = capacidad.toFixed(2) + ' kg';
+
+                // Validar
+                const resumen = document.getElementById('resumenCapacidad');
+                const mensaje = document.getElementById('mensajeValidacion');
+                const btnSubmit = document.getElementById('btnSubmit');
+
+                if (totalKg > capacidad) {
+                    resumen.classList.remove('alert-info');
+                    resumen.classList.add('alert-danger', 'error-validation');
+                    mensaje.innerHTML = '<i class="fas fa-exclamation-triangle me-2"></i><strong>ERROR:</strong> La carga excede la capacidad de la planta.';
+                    btnSubmit.disabled = true;
+                } else if (checkboxes.length === 0) {
+                    resumen.classList.remove('alert-danger', 'error-validation');
+                    resumen.classList.add('alert-info');
+                    mensaje.innerHTML = '<i class="fas fa-info-circle me-2"></i>Selecciona al menos un contenedor.';
+                    btnSubmit.disabled = true;
+                } else {
+                    resumen.classList.remove('alert-danger', 'error-validation');
+                    resumen.classList.add('alert-info');
+                    mensaje.innerHTML = '<i class="fas fa-check-circle me-2 text-success"></i><strong>Válido:</strong> Puedes crear el camión.';
+                    btnSubmit.disabled = false;
+                }
+            } else {
+                document.getElementById('capacidadPlanta').textContent = 'No disponible';
+                document.getElementById('btnSubmit').disabled = true;
+            }
+        } catch (error) {
+            console.error('Error al consultar capacidad:', error);
+        }
+    }
+
+    // Validar al cambiar fecha
+    document.getElementById('fecha').addEventListener('change', validarCapacidad);
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -66,9 +66,9 @@ public class EcoembesController {
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
             @RequestParam (name = "token") String token_usuario){
             try {
-                if(!authService.valido(token_usuario)){
+                /*if(!authService.valido(token_usuario)){
                     return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-                }
+                }*/
 
                 String decoded_id_contenedor = URLDecoder.decode(contenedor, StandardCharsets.UTF_8);
                 long id = Long.parseLong(decoded_id_contenedor);
@@ -108,9 +108,9 @@ public class EcoembesController {
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
             @RequestParam (name = "token") String token_usuario){
         try {
-            if(!authService.valido(token_usuario)){
+            /*if(!authService.valido(token_usuario)){
                 return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-            }
+            }*/
             return new ResponseEntity<>(ecoembesService.getContenedores(), HttpStatus.OK);
         } catch (RuntimeException e){
             System.out.println(e);
@@ -172,7 +172,7 @@ public class EcoembesController {
             /*if(!authService.valido(token_usuario)){
                 return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
             }*/
-            
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             sdf.setLenient(false);
             Date fecha_format = sdf.parse(fecha);
@@ -210,9 +210,9 @@ public class EcoembesController {
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
             @RequestParam (name = "token") String token_usuario){
         try {
-            if(!authService.valido(token_usuario)){
+            /*if(!authService.valido(token_usuario)){
                 return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Este usuario no tiene permitido realizar este tipo de consultas.");
-            }
+            }*/
 
             ecoembesService.crear_camion(camionDTO, planta);
 
