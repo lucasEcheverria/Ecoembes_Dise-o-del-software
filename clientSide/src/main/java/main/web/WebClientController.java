@@ -1,6 +1,8 @@
 package main.web;
 
 import jakarta.servlet.http.HttpServletRequest;
+import main.data.Contenedor;
+import main.data.Estado;
 import main.data.Planta;
 import main.proxies.IServiceProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,4 +83,61 @@ public class WebClientController {
         }
         return "plantas";
     }
+
+    @GetMapping("/contenedores")
+    public String contenedores(@RequestParam(name = "token", required = false) String token,
+                               Model model) {
+        if (token == null || token.isEmpty()) {
+            model.addAttribute("errorMessage", "Sesión no válida.");
+            return "error";
+        }
+
+        try {
+            List<Contenedor> contenedores = serviceProxy.getContenedores(token);
+            model.addAttribute("contenedores", contenedores);
+            model.addAttribute("token", token);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Error: " + ex.getMessage());
+        }
+        return "contenedores";
+    }
+
+    @GetMapping("/contenedores/historial")
+    public String consultarHistorial(
+            @RequestParam String token,
+            @RequestParam Long contenedorId,
+            @RequestParam String fechaInicio,
+            @RequestParam String fechaFin,
+            Model model) {
+
+        try {
+            List<Contenedor> contenedores = serviceProxy.getContenedores(token);
+            model.addAttribute("contenedores", contenedores);
+            model.addAttribute("token", token);
+
+            try {
+                List<Estado> historial = serviceProxy.getHistorialContenedor(
+                        contenedorId, fechaInicio, fechaFin, token);
+
+                if (historial == null || historial.isEmpty()) {
+                    // Lista vacía
+                    model.addAttribute("errorHistorial", "Rango erróneo: No hay datos disponibles para ese período.");
+                    model.addAttribute("contenedorConsultado", contenedorId);
+                } else {
+                    model.addAttribute("historialResultado", historial);
+                    model.addAttribute("contenedorConsultado", contenedorId);
+                    model.addAttribute("fechaInicioConsultada", fechaInicio);
+                    model.addAttribute("fechaFinConsultada", fechaFin);
+                }
+            } catch (Exception ex) {
+                model.addAttribute("errorHistorial", "Rango erróneo: No hay datos disponibles para ese período.");
+                model.addAttribute("contenedorConsultado", contenedorId);
+            }
+
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Error: " + ex.getMessage());
+        }
+        return "contenedores";
+    }
+
 }

@@ -1,4 +1,4 @@
 package main.data;
 
-public record Contenedor() {
+public record Contenedor(Long id, Double cantidad) {
 }
