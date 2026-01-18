@@ -13,7 +13,7 @@ import java.util.List;
 public class RestTemplateServiceProxy implements IServiceProxy{
     private final RestTemplate restTemplate;
 
-    @Value("${api.base.url")
+    @Value("${api.base.url}")
     private String apiBaseUrl;
 
     public RestTemplateServiceProxy(RestTemplate restTemplate){this.restTemplate = restTemplate;}
@@ -21,16 +21,30 @@ public class RestTemplateServiceProxy implements IServiceProxy{
     @Override
     public List<Planta> getPlantas(String token) {
         String url = apiBaseUrl + "/ecoembes/pantas_de_reciclaje?token=" + token;
-
+        System.out.println("URL: " + url);
         try {
             Planta[] array = restTemplate.getForObject(url, Planta[].class);
+            System.out.println("info solicitada" + Arrays.toString(array));
             return Arrays.asList(array);
         }
-        catch (HttpStatusCodeException e) {
-            switch (e.getStatusCode().value()) {
-                case 404 -> throw new RuntimeException("No categories found.");
-                default -> throw new RuntimeException("Failed to retrieve categories: " + e.getStatusText());
-            }
+        catch (Exception e) {
+            System.err.println("ERROR: " + e.getClass().getName());
+            System.err.println("Mensaje: " + e.getMessage());
+            throw new RuntimeException("Failed to retrieve plantas: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public Double consultarCapacidadFecha(String token, String plantaId, String fecha) {
+        String url = apiBaseUrl + "/ecoembes/plantas/" + plantaId + "/" + fecha + "?token=" + token;
+
+        try{
+            return restTemplate.getForObject(url, Double.class);
+        }catch (Exception e) {
+            System.err.println("ERROR: " + e.getClass().getName());
+            System.err.println("Mensaje: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to retrieve plantas: " + e.getMessage());
         }
     }
 }

@@ -78,7 +78,7 @@
                 <div class="card-header bg-success text-white">
                     <h5 class="card-title mb-0">
                         <!-- Icono según el tipo de planta -->
-                        <i th:if="${planta.tipo.name() == 'REST'}" class="fas fa-cloud me-2"></i>
+                        <i th:if="${planta.tipo.name() == 'HTTP'}" class="fas fa-cloud me-2"></i>
                         <i th:if="${planta.tipo.name() == 'SOCKET'}" class="fas fa-network-wired me-2"></i>
 
                         <!-- Nombre de la planta -->
@@ -133,18 +133,24 @@
                                 <i class="fas fa-search me-1"></i>Ver Capacidad
                             </button>
                         </form>
+                        <!-- Resultado de consulta de capacidad (ÉXITO) -->
+                        <div th:if="${capacidadResultado != null && plantaConsultada == planta.nombre}"
+                             class="alert alert-success mt-3">
+                            <strong><i class="fas fa-check-circle me-2"></i>Capacidad disponible:</strong>
+                            <p class="mb-0">
+                                📅 Fecha: <span th:text="${fechaConsultada}"></span><br>
+                                📦 Capacidad: <span th:text="${capacidadResultado}"></span> kg
+                            </p>
+                        </div>
+
+                        <!-- Resultado de consulta de capacidad (ERROR) -->
+                        <div th:if="${errorCapacidad != null && plantaConsultada == planta.nombre}"
+                             class="alert alert-warning mt-3">
+                            <strong><i class="fas fa-exclamation-triangle me-2"></i>Sin capacidad:</strong>
+                            <p class="mb-0" th:text="${errorCapacidad}"></p>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Footer del Card -->
-                <div class="card-footer bg-light">
-                    <!-- Botón para notificar envío -->
-                    <a th:href="@{/plantas/notificar(plantaNombre=${planta.nombre}, token=${token})}"
-                       class="btn btn-success btn-sm w-100">
-                        <i class="fas fa-truck me-2"></i>Notificar Envío
-                    </a>
-                </div>
-
             </div>
         </div>
 

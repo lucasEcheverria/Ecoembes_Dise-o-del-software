@@ -3,6 +3,8 @@ package main.web;
 import jakarta.servlet.http.HttpServletRequest;
 import main.data.Planta;
 import main.proxies.IServiceProxy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,8 +13,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
+@Controller
 public class WebClientController {
+    @Autowired
     private IServiceProxy serviceProxy;
+
     private String token;
 
     @ModelAttribute
@@ -23,7 +28,7 @@ public class WebClientController {
     }
 
     @GetMapping("/")
-    public String home(@RequestParam(name = "tocken",required = false) String token,
+    public String home(@RequestParam(name = "token",required = false) String token,
             Model model){
         model.addAttribute("token", token);
         return "index";
@@ -32,6 +37,7 @@ public class WebClientController {
     @GetMapping("/plantas")
     public String plantas(@RequestParam(name = "token", required = false) String token,
                           Model model){
+
         if (token == null || token.isEmpty()) {
             model.addAttribute("errorMessage", "Sesión no válida.");
             return "error";
@@ -44,6 +50,34 @@ public class WebClientController {
         } catch (Exception ex) {
             model.addAttribute("errorMessage", "Error: " + ex.getMessage());
             model.addAttribute("token", token);
+        }
+        return "plantas";
+    }
+
+    @GetMapping("/plantas/capacidad")
+    public String consultarCapacidad(@RequestParam String token,
+                                     @RequestParam String plantaId,
+                                     @RequestParam String fecha,
+                                     Model model)
+    {
+        try{
+            List<Planta> plantas = serviceProxy.getPlantas(token);
+            model.addAttribute("plantas", plantas);
+            model.addAttribute("token", token);
+
+            try{
+                Double capacidad = serviceProxy.consultarCapacidadFecha(token, plantaId, fecha);
+
+                model.addAttribute("capacidadResultado", capacidad);
+                model.addAttribute("plantaConsultada", plantaId);
+                model.addAttribute("fechaConsultada", fecha);
+                model.addAttribute("token", token);
+            }catch (Exception ex){
+                model.addAttribute("errorCapacidad", "No hay capacidad disponible para la fecha " + fecha + ". Prueba con otra fecha.");
+                model.addAttribute("plantaConsultada", plantaId);
+            }
+        }catch (Exception ex){
+            model.addAttribute("errorMessage", "Error: " + ex.getMessage());
         }
         return "plantas";
     }

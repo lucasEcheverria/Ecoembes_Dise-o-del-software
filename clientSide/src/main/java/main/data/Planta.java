@@ -1,4 +1,3 @@
 package main.data;
 
-public record Planta() {
-}
+public record Planta(String nombre, Tipo tipo) { }

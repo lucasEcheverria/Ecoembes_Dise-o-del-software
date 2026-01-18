@@ -136,9 +136,9 @@ public class EcoembesController {
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
             @RequestParam (name = "token") String token_usuario){
         try {
-            if(!authService.valido(token_usuario)){
+            /*if(!authService.valido(token_usuario)){
                 return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-            }
+            }*/
 
             return new ResponseEntity<>(ecoembesService.getPlantas(), HttpStatus.OK);
         } catch (RuntimeException e){
@@ -169,9 +169,9 @@ public class EcoembesController {
             @Parameter(description = "Token de autenticación del usuario", required = true, example = "abc123xyz")
             @RequestParam (name = "token") String token_usuario){
         try {
-            if(!authService.valido(token_usuario)){
+            /*if(!authService.valido(token_usuario)){
                 return new ResponseEntity<>(HttpStatus.METHOD_NOT_ALLOWED);
-            }
+            }*/
             
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             sdf.setLenient(false);
