@@ -81,11 +81,11 @@ public class RestTemplateServiceProxy implements IServiceProxy{
             throw new RuntimeException("Error al obtener historial");
         }
     }
-<<<<<<< HEAD
 
     @Override
     public void crearNuevoCamion(List<Long> contenedores, String planta, String fecha, String token) {
-        String url = apiBaseUrl + "/ecoembes/"+planta+"camiones_nuevo?planta=" + planta + "&token=" + token;
+        String url = apiBaseUrl + "/ecoembes/plantas/" + planta + "/camiones_nuevo?token=" + token;
+
         try {
             Map<String, Object> body = new HashMap<>();
             body.put("contenedores", contenedores);
@@ -96,6 +96,5 @@ public class RestTemplateServiceProxy implements IServiceProxy{
             throw new RuntimeException("Error al crear camión: " + e.getMessage());
         }
     }
-=======
->>>>>>> origin/main
+
 }

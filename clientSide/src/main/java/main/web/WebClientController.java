@@ -82,7 +82,6 @@ public class WebClientController {
         return "plantas";
     }
 
-<<<<<<< HEAD
     @GetMapping("/plantas/capacidad/api")
     @ResponseBody
     public Double consultarCapacidadAPI(
@@ -96,8 +95,6 @@ public class WebClientController {
         }
     }
 
-=======
->>>>>>> origin/main
     @GetMapping("/contenedores")
     public String contenedores(@RequestParam(name = "token", required = false) String token,
                                Model model) {
@@ -154,7 +151,6 @@ public class WebClientController {
         return "contenedores";
     }
 
-<<<<<<< HEAD
     @GetMapping("/camiones")
     public String camiones(@RequestParam(name = "token", required = false) String token,
                            Model model) {
@@ -201,6 +197,4 @@ public class WebClientController {
         return "camiones";
     }
 
-=======
->>>>>>> origin/main
 }
